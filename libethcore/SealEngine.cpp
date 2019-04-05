@@ -71,18 +71,12 @@ EVMSchedule const& SealEngineBase::evmSchedule(u256 const& _blockNumber) const
 	return chainParams().scheduleForBlockNumber(_blockNumber);
 }
 
+bigfloat SealEngineBase::totalSupply(unsigned long long const& _blockNumber) const
+{
+    return (chainParams().initialSupply.convert_to<bigfloat>() * pow(chainParams().inflationFactorPerBlockFemtoPercent.convert_to<bigfloat>()/bigfloat("1E+17"), _blockNumber));
+}
+
 u256 SealEngineBase::blockReward(unsigned long long const& _blockNumber) const
 {
-    u256 intReward = 0;
-    if (_blockNumber > 0) {
-        bigfloat initialSupply = chainParams().initialSupply.convert_to<bigfloat>();
-        bigfloat f = chainParams().inflationFactorPerBlockFemtoPercent.convert_to<bigfloat>()/bigfloat("1E+17");
-        bigfloat supply = initialSupply * pow(f, _blockNumber - 1);
-        bigfloat reward = (supply * f) - supply;
-
-        intReward = reward.convert_to<u256>();
-//        std::cout << "Ifpbfp " << chainParams().inflationFactorPerBlockFemtoPercent << " BlockReward digits: " << std::numeric_limits<bigfloat>::digits << " " << std::numeric_limits<bigfloat>::max_digits10 << std::setprecision(std::numeric_limits<bigfloat>::max_digits10)
-//             << " initialSupply = " << initialSupply << " ifpb = " << f << " supply at block " << (_blockNumber - 1) << " = " << supply << " supply * f = " << (supply * f) << " reward = " << reward << std::endl << std::flush;
-    }
-    return intReward;
+    return (_blockNumber == 0) ? u256(0) : (totalSupply(_blockNumber) - totalSupply(_blockNumber - 1)).convert_to<u256>();
 }

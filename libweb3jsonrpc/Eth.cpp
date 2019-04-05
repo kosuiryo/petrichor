@@ -98,9 +98,18 @@ Json::Value Eth::eth_accounts()
 
 string Eth::eth_blockNumber()
 {
-	return toJS(client()->number());
+    return toJS(client()->number());
 }
 
+string Eth::eth_getTotalSupply()
+{
+    return toJS(client()->getTotalSupply());
+}
+
+string Eth::eth_getCirculatingSupply()
+{
+    return toJS(client()->getCirculatingSupply());
+}
 
 string Eth::eth_getBalance(string const& _address, string const& _blockNumber)
 {

@@ -185,6 +185,8 @@ public:
 
 	/// @returns The height of the chain.
 	virtual unsigned number() const = 0;
+    virtual u256 getTotalSupply() const = 0;
+    virtual u256 getCirculatingSupply() const = 0;
 
 	/// Get a map containing each of the pending transactions.
 	/// @TODO: Remove in favour of transactions().

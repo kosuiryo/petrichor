@@ -462,6 +462,14 @@ unsigned ClientBase::number() const
 	return bc().number();
 }
 
+u256 ClientBase::getTotalSupply() const {
+    return bc().sealEngine()->totalSupply(bc().number()).convert_to<u256>();
+}
+
+u256 ClientBase::getCirculatingSupply() const {
+    return bc().sealEngine()->totalSupply(bc().number()).convert_to<u256>() - balanceAt(Address("f1117143371af98add6d269a6c15de38bee9b885"), bc().number());
+}
+
 Transactions ClientBase::pending() const
 {
 	return postSeal().pending();
